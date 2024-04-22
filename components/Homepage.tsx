@@ -1,6 +1,10 @@
+'use client'
+import { useSession } from 'next-auth/react'
 import React from 'react'
 
 const Homepage = () => {
+  const { data: session, status } = useSession()
+  console.log(session)
   return (
     <div className="  flex justify-center items-center min-h-screen flex-col px-4">
       <img
