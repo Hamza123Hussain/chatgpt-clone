@@ -6,11 +6,12 @@ export const authOptions = {
   // Configure one or more authentication providers
   providers: [
     Google({
-      clientId: process.env.Google_id!,
-      clientSecret: process.env.Google_secret!,
+      clientId: process.env.Google_id as string,
+      clientSecret: process.env.Google_secret as string,
     }),
     // ...add more providers here
   ],
 }
+const handler = NextAuth(authOptions)
 
-export default NextAuth(authOptions)
+export { handler as GET, handler as POST }
