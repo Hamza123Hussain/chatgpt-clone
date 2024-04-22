@@ -30,7 +30,17 @@ function LayoutContent({
 
   // If the session status is loading, return loading indicator or skeleton
   if (status === 'loading') {
-    return <div>Loading...</div>
+    return (
+      <div className=" flex min-h-screen  justify-center items-center gap-4">
+        <div className="loader"></div>
+        <div className="loader"></div>
+        <div className="loader"></div>
+        <div className="loader"></div>
+        <div className="loader"></div>
+        <div className="loader"></div>
+        <div className="loader"></div>
+      </div>
+    )
   }
 
   // If there is no session, render the login page

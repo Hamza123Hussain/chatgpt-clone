@@ -33,3 +33,16 @@ html:hover ::-webkit-scrollbar {
 ::-webkit-scrollbar {
   width: 8px;
 }
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#000 0 90deg, #ccc 0 180deg);
+  animation: l21 1s infinite linear;
+}
+@keyframes l21 {
+  100% {
+    transform: rotate(0.5turn);
+  }
+}
