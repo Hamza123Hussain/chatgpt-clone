@@ -46,3 +46,6 @@ html:hover ::-webkit-scrollbar {
     transform: rotate(0.5turn);
   }
 }
+input::placeholder {
+  color: black; /* Change placeholder color to gray */
+}
