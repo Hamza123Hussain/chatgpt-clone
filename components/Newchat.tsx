@@ -19,12 +19,12 @@ const Newchat = () => {
       {
         //this is the data in the chats database
         userId: session?.user?.email!,
-        Messages: [],
+        // Messages: [],
         CreatedAt: serverTimestamp(),
       }
     )
 
-    router.push(`chat/${doc.id}`) // the user will be pushed to a new page once clicked on this function as a new chat is created
+    router.push(`/chat/${doc.id}`) // the user will be pushed to a new page once clicked on this function as a new chat is created
   }
 
   /**Sure, let's break it down into simpler terms:
@@ -42,11 +42,11 @@ const Newchat = () => {
 So, in simple terms, this code adds a new document to the 'chats' collection within the Firestore database. The document contains the user's email address (`userId`) and the timestamp of when the chat room was created (`CreatedAt`). */
 
   return (
-    <div className=" flex justify-between items-center  hover:bg-gray-400    hover:border-2 hover:rounded-lg px-2 py-1 ">
-      <div
-        onClick={createchat}
-        className=" cursor-pointer p-1 flex items-center justify-between gap-2 text-white"
-      >
+    <div
+      onClick={createchat}
+      className=" cursor-pointer flex justify-between items-center  hover:bg-gray-400    hover:border-2 hover:rounded-lg px-2 py-1 "
+    >
+      <div className="  p-1 flex items-center justify-between gap-2 text-white">
         <img
           src="chatgpt-logo-02AFA704B5-seeklogo.com.png"
           className=" w-9 border-2 border-black rounded-full p-1 "
