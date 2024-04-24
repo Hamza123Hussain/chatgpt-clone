@@ -64,6 +64,23 @@ const Chatinput = ({ id, api }: Props) => {
   const sendMessage = async (e: any) => {
     e.preventDefault()
 
+    let message: Message = {
+      text: prompt,
+      CreatedAt: serverTimestamp(),
+      user: {
+        _id: session?.user?.email!,
+        name: session?.user?.name!,
+        avatar: session?.user?.image!,
+      },
+    }
+
+    await addDoc(
+      collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+      {
+        message,
+      }
+    )
+
     let url = 'https://api.openai.com/v1/chat/completions'
 
     let token = `Bearer ` + api
@@ -90,6 +107,25 @@ const Chatinput = ({ id, api }: Props) => {
     let resjson = await res.json()
     if (resjson) {
       console.log(resjson.choices[0].message)
+      setprompt('')
+      toast.success('CHATGPT HAS RESPONDED')
+      message = {
+        text: resjson.choices[0].message.content,
+        CreatedAt: serverTimestamp(),
+        user: {
+          _id: resjson.choices[0].message.role,
+          name: 'GPT',
+          avatar:
+            'https://miro.medium.com/v2/resize:fit:896/1*-bVWfPfIGyYWXVJiVROc9w.jpeg',
+        },
+      }
+
+      await addDoc(
+        collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+        {
+          message,
+        }
+      )
     }
   }
 
