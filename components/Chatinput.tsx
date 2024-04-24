@@ -6,8 +6,9 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 type Props = {
   id: string
+  api: any
 }
-const Chatinput = ({ id }: Props) => {
+const Chatinput = ({ id, api }: Props) => {
   // const sendmessage = async (e: any) => {
   //   e.preventDefault()
   //   const input = prompt.trim()
@@ -38,24 +39,11 @@ const Chatinput = ({ id }: Props) => {
   // }
 
   /** // const model = 'text-davinci-003' // Define the model here
-    // const message: Message = {
-    //   text: input,
-    //   CreatedAt: serverTimestamp(),
-    //   user: {
-    //     _id: session?.user?.email!,
-    //     name: session?.user?.name!,
-    //     avatar: session?.user?.image!,
-    //   },
-    // }
+    
 
     // const notification = toast.loading('CHATGPT IS PROCESSING..')
 
-    // // await addDoc(
-    // //   collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
-    // //   {
-    // //     message,
-    // //   }
-    // // )
+ 
 
     // const response = await fetch('/api/AskQuestion', {
     //   method: 'POST',
@@ -76,11 +64,9 @@ const Chatinput = ({ id }: Props) => {
   const sendMessage = async (e: any) => {
     e.preventDefault()
 
-    let apikey = 'sk-proj-ZuAwNuRmnqkvsRlRQdmAT3BlbkFJDYvvdmzGHLvFDJAl8ryE'
-    // console.log(message)
     let url = 'https://api.openai.com/v1/chat/completions'
 
-    let token = `Bearer ` + apikey
+    let token = `Bearer ` + api
     let model = 'gpt-3.5-turbo'
 
     let messagesToSend = [
@@ -103,9 +89,7 @@ const Chatinput = ({ id }: Props) => {
     })
     let resjson = await res.json()
     if (resjson) {
-      console.log(resjson)
-
-      // console.log(resjson.choices[0].message)
+      console.log(resjson.choices[0].message)
     }
   }
 

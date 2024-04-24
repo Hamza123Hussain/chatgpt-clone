@@ -8,13 +8,14 @@ type Props = {
 }
 
 const page = ({ params: { id } }: Props) => {
+  console.log(process.env.OpenAI_API_Key)
   return (
     <div className=" flex flex-col min-h-screen ">
       <div className=" flex-1 ">
         <Chat id={id} />
       </div>
       <div>
-        <Chatinput id={id} />
+        <Chatinput api={process.env.OpenAI_API_Key} id={id} />
       </div>
     </div>
   )
