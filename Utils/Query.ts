@@ -1,8 +1,9 @@
 import openai from './Chatgpt'
-const Query = async (prompt: string, model: string) => {
+
+const Query = async (prompt: string) => {
   try {
     const res = await openai.completions.create({
-      model,
+      model: 'text-curie-003',
       prompt,
       temperature: 0.9,
       top_p: 1,
@@ -14,7 +15,7 @@ const Query = async (prompt: string, model: string) => {
     return res.choices[0].text
   } catch (err) {
     console.error(err)
-    throw new Error('chatgpt has no answer') // or return a default value
+    throw new Error('Failed to generate response from GPT')
   }
 }
 

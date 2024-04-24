@@ -8,44 +8,104 @@ type Props = {
   id: string
 }
 const Chatinput = ({ id }: Props) => {
-  const sendmessage = async (e: any) => {
+  // const sendmessage = async (e: any) => {
+  //   e.preventDefault()
+  //   const input = prompt.trim()
+
+  //   let token = `Bearer sk-proj-ZuAwNuRmnqkvsRlRQdmAT3BlbkFJDYvvdmzGHLvFDJAl8ryE`
+  //   let url = 'https://api.openai.com/v1/chat/completions'
+  //   let model = 'gpt-3.5-turbo-1106'
+  //   let messagessend = {
+  //     role: `${session?.user?.email}`,
+  //     content: input,
+  //   }
+
+  //   let respsone = await fetch(url, {
+  //     method: 'POST',
+  //     headers: {
+  //       Authorization: token,
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       model: model,
+  //       messages: messagessend,
+  //     }),
+  //   })
+
+  //   if (respsone.ok) {
+  //     console.log(respsone.json())
+  //   }
+  // }
+
+  /** // const model = 'text-davinci-003' // Define the model here
+    // const message: Message = {
+    //   text: input,
+    //   CreatedAt: serverTimestamp(),
+    //   user: {
+    //     _id: session?.user?.email!,
+    //     name: session?.user?.name!,
+    //     avatar: session?.user?.image!,
+    //   },
+    // }
+
+    // const notification = toast.loading('CHATGPT IS PROCESSING..')
+
+    // // await addDoc(
+    // //   collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+    // //   {
+    // //     message,
+    // //   }
+    // // )
+
+    // const response = await fetch('/api/AskQuestion', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     prompt: input,
+    //     id,
+    //     model, // Include the model parameter here
+    //     session,
+    //   }),
+    // })
+    // if (response.ok) {
+    //   toast.success('GPT HAS ANSWERED')
+    // }
+ */
+  const sendMessage = async (e: any) => {
     e.preventDefault()
-    const input = prompt.trim()
-    setprompt('')
-    const model = 'gpt-4-turbo'
-    const message: Message = {
-      text: input,
-      CreatedAt: serverTimestamp(),
-      user: {
-        _id: session?.user?.email!,
-        name: session?.user?.name!,
-        avatar: session?.user?.image!,
-      },
-    }
 
-    const notification = toast.loading('CHATGPT IS PROCESSING..')
+    let apikey = 'sk-proj-ZuAwNuRmnqkvsRlRQdmAT3BlbkFJDYvvdmzGHLvFDJAl8ryE'
+    // console.log(message)
+    let url = 'https://api.openai.com/v1/chat/completions'
 
-    await addDoc(
-      collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+    let token = `Bearer ` + apikey
+    let model = 'gpt-3.5-turbo'
+
+    let messagesToSend = [
       {
-        message,
-      }
-    )
+        role: 'user',
+        content: prompt,
+      },
+    ]
 
-    const response = await fetch('/api/AskQuestion', {
+    let res = await fetch(url, {
       method: 'POST',
       headers: {
+        Authorization: token,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        prompt: input,
-        id,
-        model,
-        session,
+        model: model,
+        messages: messagesToSend,
       }),
     })
-    if (response.ok) {
-      toast.success('GPT HAS ANSWERED')
+    let resjson = await res.json()
+    if (resjson) {
+      console.log(resjson)
+
+      // console.log(resjson.choices[0].message)
     }
   }
 
@@ -54,7 +114,7 @@ const Chatinput = ({ id }: Props) => {
   return (
     <div className=" flex flex-col  sm:flex-row justify-center items-center mb-3 gap-2">
       <form
-        onSubmit={sendmessage}
+        onSubmit={sendMessage}
         style={{ width: '50vw' }}
         className=" flex justify-center    rounded-lg items-center border-2 border-gray-700 p-1    "
       >
@@ -82,7 +142,7 @@ const Chatinput = ({ id }: Props) => {
         </button>
       </form>
       <button
-        onClick={(e: any) => sendmessage}
+        onClick={(e: any) => sendMessage}
         disabled={!session || !prompt}
         className=" visible sm:invisible disabled:opacity-15 bg-green-500 text-white p-1 rounded-lg"
       >
