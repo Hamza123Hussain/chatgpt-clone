@@ -6,6 +6,7 @@ import Sidebar from '@/components/Sidebar'
 
 import './globals.css'
 import ClientProvider from '@/components/ClientProvider'
+import { Modelprovider } from '@/Utils/Context'
 interface RootLayoutProps {
   children: React.ReactNode
 }
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
     <html lang="en">
       <body>
         <SessionProvider>
-          <LayoutContent>{children}</LayoutContent>
+          <LayoutContent>
+            <Modelprovider>{children}</Modelprovider>
+          </LayoutContent>
         </SessionProvider>
       </body>
     </html>

@@ -1,5 +1,6 @@
 'use client'
 import { db } from '@/Firebase'
+import { useModelContext } from '@/Utils/Context'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
@@ -9,58 +10,9 @@ type Props = {
   api: any
 }
 const Chatinput = ({ id, api }: Props) => {
-  // const sendmessage = async (e: any) => {
-  //   e.preventDefault()
-  //   const input = prompt.trim()
+  const { model } = useModelContext()
 
-  //   let token = `Bearer sk-proj-ZuAwNuRmnqkvsRlRQdmAT3BlbkFJDYvvdmzGHLvFDJAl8ryE`
-  //   let url = 'https://api.openai.com/v1/chat/completions'
-  //   let model = 'gpt-3.5-turbo-1106'
-  //   let messagessend = {
-  //     role: `${session?.user?.email}`,
-  //     content: input,
-  //   }
-
-  //   let respsone = await fetch(url, {
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: token,
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       model: model,
-  //       messages: messagessend,
-  //     }),
-  //   })
-
-  //   if (respsone.ok) {
-  //     console.log(respsone.json())
-  //   }
-  // }
-
-  /** // const model = 'text-davinci-003' // Define the model here
-    
-
-    // const notification = toast.loading('CHATGPT IS PROCESSING..')
-
- 
-
-    // const response = await fetch('/api/AskQuestion', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     prompt: input,
-    //     id,
-    //     model, // Include the model parameter here
-    //     session,
-    //   }),
-    // })
-    // if (response.ok) {
-    //   toast.success('GPT HAS ANSWERED')
-    // }
- */
+  console.log(model)
   const sendMessage = async (e: any) => {
     e.preventDefault()
 
@@ -84,8 +36,16 @@ const Chatinput = ({ id, api }: Props) => {
     let url = 'https://api.openai.com/v1/chat/completions'
 
     let token = `Bearer ` + api
-    let model = 'gpt-3.5-turbo'
 
+    /**   Lists of Models to be integrated
+gpt-3.5-turbo-0125	New Updated GPT 3.5 Turbo
+The latest GPT-3.5 Turbo model with higher accuracy at responding in requested formats and a fix for a bug which caused a text encoding issue for non-English language function calls. Returns a maximum of 4,096 output tokens. Learn more.	16,385 tokens	Up to Sep 2021
+gpt-3.5-turbo	Currently points to gpt-3.5-turbo-0125.	16,385 tokens	Up to Sep 2021
+gpt-3.5-turbo-1106	GPT-3.5 Turbo model with improved instruction following, JSON mode, reproducible outputs, parallel function calling, and more. Returns a maximum of 4,096 output tokens. Learn more.	16,385 tokens	Up to Sep 2021
+gpt-3.5-turbo-instruct	Similar capabilities as GPT-3 era models. Compatible with legacy Completions endpoint and not Chat Completions.	4,096 tokens	Up to Sep 2021
+gpt-3.5-turbo-16k	Legacy Currently points to gpt-3.5-turbo-16k-0613.	16,385 tokens	Up to Sep 2021
+gpt-3.5-turbo-0613	Legacy Snapshot of gpt-3.5-turbo from June 13th 2023. Will be deprecated on June 13, 2024.	4,096 tokens	Up to Sep 2021
+gpt-3.5-turbo-16k-0613	Legacy Snapshot of gpt-3.5-16k-turbo from June 13th 2023. Will be deprecated on June 13, 2024. */
     let messagesToSend = [
       {
         role: 'user',
