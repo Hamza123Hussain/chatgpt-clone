@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import Sidebar from '@/components/Sidebar'
 
 import './globals.css'
+import ClientProvider from '@/components/ClientProvider'
 interface RootLayoutProps {
   children: React.ReactNode
 }
@@ -50,14 +51,17 @@ function LayoutContent({
 
   // If there is a session, render the children
   return (
-    <div className="flex h-screen">
-      <div className="bg-gray-800 p-2 w-5/12 sm:w-1/3 md:w-2/6 lg:w-1/6 overflow-y-auto">
-        <Sidebar />
-      </div>
+    <>
+      <ClientProvider />
+      <div className="flex h-screen">
+        <div className="bg-gray-800 p-2 w-5/12 sm:w-1/3 md:w-2/6 lg:w-1/6 overflow-y-auto">
+          <Sidebar />
+        </div>
 
-      <div className="w-7/12 sm:w-2/3 md:w-4/6 lg:w-5/6 bg-[#74AA9C] overflow-y-auto">
-        {children}
+        <div className="w-7/12 sm:w-2/3 md:w-4/6 lg:w-5/6 bg-[#74AA9C] overflow-y-auto">
+          {children}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -1,8 +1,9 @@
 'use client'
 import { db } from '@/Firebase'
-import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 type Props = {
   id: string
 }
@@ -11,7 +12,7 @@ const Chatinput = ({ id }: Props) => {
     e.preventDefault()
     const input = prompt.trim()
     setprompt('')
-
+    const model = 'gpt-4-turbo'
     const message: Message = {
       text: input,
       CreatedAt: serverTimestamp(),
@@ -22,6 +23,8 @@ const Chatinput = ({ id }: Props) => {
       },
     }
 
+    const notification = toast.loading('CHATGPT IS PROCESSING..')
+
     await addDoc(
       collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
       {
@@ -29,7 +32,21 @@ const Chatinput = ({ id }: Props) => {
       }
     )
 
-    alert('message sent')
+    const response = await fetch('/api/AskQuestion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: input,
+        id,
+        model,
+        session,
+      }),
+    })
+    if (response.ok) {
+      toast.success('GPT HAS ANSWERED')
+    }
   }
 
   const { data: session } = useSession()
