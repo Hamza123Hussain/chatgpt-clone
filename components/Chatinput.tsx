@@ -27,7 +27,7 @@ const Chatinput = ({ id, api }: Props) => {
     }
 
     await addDoc(
-      collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+      collection(db, 'users', session?.user?.email!, 'chats', id, 'messages'),
       {
         message,
       }
@@ -81,7 +81,7 @@ gpt-3.5-turbo-16k-0613	Legacy Snapshot of gpt-3.5-16k-turbo from June 13th 2023.
       }
 
       await addDoc(
-        collection(db, 'users', session?.user?.email!, 'chats', id, 'message'),
+        collection(db, 'users', session?.user?.email!, 'chats', id, 'messages'),
         {
           message,
         }
@@ -96,20 +96,20 @@ gpt-3.5-turbo-16k-0613	Legacy Snapshot of gpt-3.5-16k-turbo from June 13th 2023.
       <form
         onSubmit={sendMessage}
         style={{ width: '50vw' }}
-        className=" flex justify-center    rounded-lg items-center border-2 border-gray-700 p-1    "
+        className=" flex justify-center items-center gap-2      "
       >
         <input
           value={prompt}
           onChange={(e) => setprompt(e.target.value)}
           type="text"
-          className="  sm:flex-1 flex-grow bg-transparent focus:outline-none text-white px-4 sm:px-2"
+          className=" text-xs sm:texts w-5/6 border-2 rounded-lg p-1  border-gray-700  sm:flex-1 flex-grow bg-transparent focus:outline-none text-white px-4 sm:px-2"
           placeholder=" Enter Message "
         />
 
         <button
           type="submit"
           disabled={!session || !prompt}
-          className=" invisible sm:visible disabled:opacity-15"
+          className=" disabled:opacity-15  w-1/6"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -121,13 +121,6 @@ gpt-3.5-turbo-16k-0613	Legacy Snapshot of gpt-3.5-16k-turbo from June 13th 2023.
           </svg>
         </button>
       </form>
-      <button
-        onClick={(e: any) => sendMessage}
-        disabled={!session || !prompt}
-        className=" visible sm:invisible disabled:opacity-15 bg-green-500 text-white p-1 rounded-lg"
-      >
-        Send Message
-      </button>
     </div>
   )
 }

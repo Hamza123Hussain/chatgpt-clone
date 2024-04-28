@@ -58,7 +58,9 @@ So, in simple terms, this code listens to changes in the 'chats' collection of t
               alt=""
             />
 
-            <p className="  text-white">{session.user?.name}</p>
+            <p className="  text-white text-xs sm:text-sm">
+              {session.user?.name}
+            </p>
           </div>
         ) : (
           ''

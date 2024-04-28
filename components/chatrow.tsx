@@ -1,12 +1,11 @@
 'use client'
 import { db } from '@/Firebase'
-import { collection, deleteDoc, doc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore'
 
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { useCollection } from 'react-firebase-hooks/firestore'
 
 type Props = {
   id: string
@@ -17,9 +16,33 @@ const Chatrow = ({ id }: Props) => {
   const [active, setactive] = useState(false)
   const pathname = usePathname()
   const { data: session } = useSession()
-  const [messagesSnapshot] = useCollection(
-    collection(db, 'users', session?.user?.email!, 'chats', id, 'messages')
-  )
+  const [message, setMessage] = useState<any>([])
+  let firstMessage = 'New Chat'
+  useEffect(() => {
+    const getdata = () => {
+      if (!session) return
+
+      const messagesRef = collection(
+        db,
+        'users',
+        session?.user?.email!,
+        'chats',
+        id,
+        'messages'
+      )
+      onSnapshot(messagesRef, (snapshot) => {
+        const updatedMessages: any = snapshot.docs.map(
+          (doc) => doc.data() as Message
+        )
+        setMessage(updatedMessages)
+      })
+    }
+
+    getdata()
+  }, [])
+  if (message && message.length > 0) {
+    firstMessage = message[0].message.text
+  }
   /**In Firebase Firestore, data is organized into collections and documents. Think of collections as folders and documents as files within those folders.
 
 Here's the breakdown of the collection path:
@@ -31,7 +54,7 @@ session?.user?.email!: This accesses the email address of the currently authenti
 'chats': This is a subcollection within the user's document that stores chat rooms. Each document within this subcollection represents a chat room.
 id: This is the ID of the specific chat room you want to retrieve messages from.
 'messages': This is a subcollection within the chat room document that stores messages. Each document within this subcollection represents a message in the chat room. */
-
+  // Default value if there are no messages
   useEffect(() => {
     if (pathname.includes(id)) {
       setactive(true)
@@ -39,12 +62,6 @@ id: This is the ID of the specific chat room you want to retrieve messages from.
       setactive(false)
     }
   }, [pathname])
-
-  let firstMessage = 'New Chat' // Default value if there are no messages
-
-  if (messagesSnapshot && messagesSnapshot.docs.length > 0) {
-    firstMessage = messagesSnapshot.docs[0].data().text
-  }
 
   /**const [messagesSnapshot] = useCollection(...): We use the useCollection hook provided by Firebase Firestore to listen to changes in the collection of messages within a specific chat room. The messagesSnapshot variable contains a snapshot of the messages collection.
 let firstMessage = 'New Chat';: We initialize the firstMessage variable with the default value 'New Chat'. This value will be displayed if there are no messages in the chat room.
@@ -66,14 +83,14 @@ return <>{firstMessage}</>;: Finally, we return firstMessage, which contains eit
     >
       <Link href={`/chat/${id}`}>
         {' '}
-        <div className=" flex gap-2">
+        <div className=" flex gap-2 items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className="w-4 h-4 sm:w-6 sm:h-6"
           >
             <path
               strokeLinecap="round"
@@ -82,7 +99,7 @@ return <>{firstMessage}</>;: Finally, we return firstMessage, which contains eit
             />
           </svg>
 
-          <p className=" text-xs sm:text-sm">{firstMessage}</p>
+          <p className=" text-[10px] sm:text-sm">{firstMessage}</p>
         </div>
       </Link>
       <div className=" cursor-pointer" onClick={deletechat}>
@@ -90,7 +107,7 @@ return <>{firstMessage}</>;: Finally, we return firstMessage, which contains eit
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-6 sm:h-6"
         >
           <path
             fillRule="evenodd"
